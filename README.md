@@ -1,5 +1,7 @@
 # Apuntes de React (Basado en Videos)
 
+Este documento resume los conceptos clave sobre React, extraídos de una serie de videos educativos.
+
 ---
 
 ## 📚 Temas Cubiertos
@@ -13,6 +15,9 @@
 * Métodos de Estilizado (Modules, Global, SCSS)
 * Renderizado en React
 * Estado (State) en React
+* Efectos Secundarios (Side Effects)
+* El Hook `useEffect`
+* Manejo de Formularios
 
 ---
 
@@ -23,7 +28,7 @@ React es una **biblioteca de JavaScript** (o librería) que se utiliza para cons
 Sus principios son:
 
 * **Declarativo**: Le dices a React *qué* quieres mostrar (usando componentes y estado), y React se encarga de *cómo* actualizar el DOM (la estructura de la página web) de manera eficiente para que coincida con lo que declaraste.
-* **Basado en componentes**: La interfaz se divide en piezas reutilizables e independientes llamadas componentes. Cada componente es una función que acepta datos (`props`) y devuelve una descripción de la UI (usando JSX).
+* **Basado en componentes**: La interfaz se divide en piezas reutilizantes e independientes llamadas componentes. Cada componente es una función que acepta datos (`props`) y devuelve una descripción de la UI (usando JSX).
 * **"Aprende una vez, escríbelo donde sea"**: La misma lógica de componentes de React se puede usar para la web (con `react-dom`), aplicaciones móviles (con `React Native`) o de escritorio.
 
 ---
@@ -169,3 +174,52 @@ Para crear un estado, se usa el *Hook* **`useState`**:
 4.  Al llamar a `setLikes()`, React hace dos cosas:
     1.  Actualiza el valor de `likes`.
     2.  Automáticamente **provoca un nuevo renderizado** (un *re-render*) del componente, "repintando" la interfaz con el nuevo valor.
+
+---
+
+## ⚡ ¿Qué es un "Side Effect" (Efecto Secundario)?
+
+El trabajo principal de un componente de React es "renderizar UI" (describir cómo debe verse la interfaz). Cualquier cosa que haga tu componente que **no** sea calcular y devolver JSX, se considera un "efecto secundario".
+
+Básicamente, es **cualquier interacción con el "mundo exterior"** fuera de React.
+
+Ejemplos comunes de *side effects* son:
+
+* **Peticiones a APIs**: Hacer `fetch` a un servidor para obtener datos.
+* **Manipulación del DOM**: Cambiar el título de la página (`document.title = ...`).
+* **Suscripciones**: Conectarse a un WebSocket (`new WebSocket(...)`) o escuchar eventos del navegador (`window.addEventListener('scroll', ...)`).
+* **Temporizadores**: Usar `setTimeout` o `setInterval`.
+
+Estos efectos no deben ejecutarse directamente dentro del cuerpo del componente, ya que eso afectaría el renderizado. Para eso existe `useEffect`.
+
+---
+
+## 🎣 El Hook `useEffect`
+
+El *Hook* `useEffect` es la herramienta que nos da React para **ejecutar efectos secundarios (side effects)** en nuestros componentes.
+
+Le dice a React: "Ejecuta esta función *después* de que te hayas encargado de renderizar el componente".
+
+### ¿Cómo se usa?
+
+`useEffect` recibe dos argumentos:
+1.  Una **función (el "efecto")**: El código que quieres ejecutar (ej. el `fetch`).
+2.  Un **array de dependencias**: Un array que le dice a React *cuándo* debe volver a ejecutar el efecto.
+
+```javascript
+import { useEffect, useState } from 'react';
+
+function MiComponente() {
+  const [datos, setDatos] = useState(null);
+
+  useEffect(() => {
+    // 1. Esta es la función del efecto
+    console.log('El componente se ha renderizado');
+    
+    // Ejemplo: Petición a una API
+    fetch('[https://api.ejemplo.com/datos](https://api.ejemplo.com/datos)')
+      .then(res => res.json())
+      .then(data => setDatos(data));
+
+  }, []); // 2. Este es el array de dependencias
+}
