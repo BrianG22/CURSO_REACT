@@ -1,8 +1,9 @@
+import styles from './css/App.module.css';
 import VideoItem from './components/VideoItem.jsx';
 import VideoList from './components/VideoList.jsx';
 
 const App = () => (
-	<>
+	<div className={styles.container}>
 		<VideoList title='Curso de React'>
 			<VideoItem
 				title='Componentes'
@@ -25,9 +26,8 @@ const App = () => (
 				description='Introducción al backend con Node JS'
 			></VideoItem>
 		</VideoList>
-        		<VideoList title='Curso de Next JS'>
-		</VideoList>
-	</>
+		<VideoList title='Curso de Next JS'></VideoList>
+	</div>
 );
 
 export default App;
