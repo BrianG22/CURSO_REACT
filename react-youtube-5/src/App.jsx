@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 const App = () => {
   const [count, setCount] = useState({ count: 0 });
   const [step, setStep] = useState(1);
 
   useEffect(() => {
-    console.log('useEffect', count);
+    console.log("useEffect", count);
     document.title = count.count;
-  }, ['Desarrollo Útil']);
+  });
 
   return (
     <div>
